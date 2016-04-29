@@ -1,5 +1,9 @@
 # LaraEstoque
 
+#Descrição
+
+Este projeto tem fins educativo, utilizado no treinamento aplicado no "TrayLabs", versões anteriores disponível em : https://github.com/gjunior-tray/estoque
+
 #Configuração do projeto
 
 - Já com o ambiente configurado, instale as dependencias do projeto via ``composer install``
