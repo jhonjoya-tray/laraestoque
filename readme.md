@@ -1,27 +1,66 @@
-# Laravel PHP Framework
+# LaraEstoque
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+#Configuração do projeto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+- Já com o ambiente configurado, instale as dependencias do projeto via ``composer install``
+- Copie o arquivo ``.env.example`` para ``.env`` neste arquivo aponte para o banco de dados a ser utilizado
+- Realize a restauração do banco, utilizando o arquivo ``estoque.sql`` disponível neste projeto
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+#Congigurnando o vhost
 
-## Official Documentation
+- Crie o arquivo laraestoque.conf em /etc/nginx/conf.d , com o conteúdo informado abaixo:
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+```
+server {
+  server_name laraestoque.traylabs.php4devs;
+  root        /var/www/laraestoque/public;
+  index       index.php;
 
-## Contributing
+  client_max_body_size 100M;
+  fastcgi_read_timeout 1800;
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+  location / {
+    try_files $uri $uri/ /index.php$is_args$args;
+  }
 
-## Security Vulnerabilities
+  location /status {
+     access_log off;
+     allow 172.17.0.0/16;
+     deny all;
+     include /etc/nginx/fastcgi_params;
+     fastcgi_param SCRIPT_FILENAME /status;
+     fastcgi_pass 127.0.0.1:9000;
+  }
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+  location /ping {
+     access_log off;
+     allow all;
+     include fastcgi_params;
+     fastcgi_param SCRIPT_FILENAME /ping;
+     fastcgi_pass 127.0.0.1:9000;
+  }
 
-## License
+  location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+    expires       max;
+    log_not_found off;
+    access_log    off;
+  }
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+  location ~ \.php$ {
+    try_files     $uri =404;
+    include       fastcgi_params; 
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_pass  127.0.0.1:9000;
+    # fastcgi_pass  unix:/var/run/hhvm/hhvm.sock;
+  } 
+} 
+```
+- Edite o arquivo /etc/hosts e adicione o apontamento
+
+```
+127.0.0.1  http://laraestoque.traylabs.php4devs/
+```
+
+- Reinicie o container
+- Acesse a url http://laraestoque.traylabs.php4devs/
