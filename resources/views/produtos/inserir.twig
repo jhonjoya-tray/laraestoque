@@ -1,0 +1,24 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+
+    <h1>Incluir Produto</h1>
+    <hr>
+    <p><a href="{{ action("ProdutosController@getIndex") }}">Listar Produtos</a> &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;
+    <a href="voltar" onclick="window.history.go(-1)">Voltar</a></p>
+    <form class="form"  method="post" action="{{ action('ProdutosController@postInserir') }}" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+        <label>Nome:</label>
+        <input class="form-control" type="text" name="nome" value="{{input_old
+('nome')}}" length="100" required="required"><br>
+    
+        <label>Arquivo:</label>
+        <input class="form-control" type="file" name="imagem"><br>
+
+        <label>Quantidade:</label>
+        0<hr>
+        <input class="btn btn-default" type="submit" value="Inserir">
+        <input class="btn btn-default" type="button" value="Cancelar" onclick="javascript:window.location='{{ urlVoltar }}'">
+    </form>
+
+{% endblock %}

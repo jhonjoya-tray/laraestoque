@@ -1,0 +1,27 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+	<h1>Editar Produto</h1>
+	<hr>
+	<form class="form" method="POST" action={{action("ProdutosController@postEditar")}}>
+		<input type="hidden" name="_token" value="{{ csrf_token() }}" />
+
+		<div class="col-xs-6">
+			<label>Nome do produto</label>
+			<input readonly class="hidden" name="id" value="{{produto.id}}">
+			<input class="form-control" name="nome" value="{{produto.nome}}">
+			{% if errors.first('nome') %}
+				<div class="label label-warning"> {{ errors.first('nome') }} </div>
+			{% endif %}
+		</div>
+		<div class="col-xs-6">
+			<label>Quantidade</label>
+			<input readonly  class="form-control" name="quantidade" value="{{produto.quantidade}}">
+		</div>
+
+		<div class="col-xs-12" style="margin-top:10px">
+			<button class="btn btn-success pull-right">Atualizar</button>
+		</div>
+
+	</form>
+{% endblock %}

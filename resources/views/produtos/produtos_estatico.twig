@@ -1,0 +1,31 @@
+<html>
+<head>
+	<title>Produtos :: Listar</title>
+</head>
+<body>
+	<h1>Listar Produtos</h1>
+	<hr>
+	<form method="get" action="produtos_listar.php">
+		<label>Procurar por nome:</label>
+		<input type="text" name="nome" length="100">
+		<input type="submit" value="Buscar">
+		<input type="reset" value="Limpar">			
+	</form>
+	<hr>
+	<p><a href="produtos_inserir.php">Inserir Produto</a>&nbsp;<a href="../index.php">Voltar</a></p>
+	<table border="1">
+		<tr>
+			<td>Id</td>
+			<td>Produto</td>
+			<td>Quantidade</td>
+			<td>Ações</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><a href="#">Alterar</a></td>
+		</tr>
+	</table>
+</body>
+</html>

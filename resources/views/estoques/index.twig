@@ -1,0 +1,42 @@
+{% extends 'layout' %}
+
+{% block content %}
+   <h1>Controle de Estoque</h1>
+        {% if alerta %}
+            <h3>{{ alerta | raw }}</h3>
+        {% endif %}
+        <hr>
+        <form method="post" action="{{ action ('EstoqueController@postEstoque') }}">  
+            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+            <table class="table table-ls">
+                <tr>
+                    <td>Id</td>
+                    <td>Produto</td>
+                    <td>Estoque Atual</td>
+                    <td>+/-</td>
+                <tr>
+                {% for produto in produtos %}
+                <tr>
+                    <td>{{ produto.id }}</td>
+                    <td>{{ produto.nome }}</td>
+                    <td>{{ produto.quantidade }}</td>
+                    <td><input type="number" name="produto[{{produto.id}}]" value="{{produto.quantidade}}"></td>
+                </tr>
+                {% endfor %}
+            </table>
+            <hr>
+            <input type="submit" value="Gravar">
+            <input type="button" value="Cancelar" onclick="javascript:window.location='{{ urlVoltar }}'">
+        </form>
+
+        {% for log in session_get('logs') %}
+            {% if log.foiAtualuzado %}
+                <div class="alert alert-success" role="alert"><strong>Atualizado: </strong> {{log.produto.nome}} </div>
+            {% endif %}
+            
+            {% if not log.foiAtualuzado %}
+                <div class="alert alert-warning" role="alert"><strong>Não atualizado: </strong> {{log.produto.nome}} </div>
+            {% endif %}
+        {% endfor %}
+
+{% endblock %}

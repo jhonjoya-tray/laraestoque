@@ -1,0 +1,56 @@
+
+{% extends 'layout.twig' %}
+
+{% block content %}
+	<h1>Listar Produtos</h1>
+	<hr>
+
+	{% if session_get('message') %}
+		<div class="alert alert-warning">
+		  <strong>Informação:</strong> {{session_get('message')}}
+		</div>
+	{% endif %}
+
+	<form class="form" method="get" action="{{action('ProdutosController@getIndex')}}">
+		<div class="col-xs-6">
+			<label>Procurar por nome:</label>
+			<input class="form-control" type="text" name="nome" length="100">
+		</div>
+		<div class="col-xs-6">
+			<input class="btn btn-default" type="submit" value="Buscar">
+			<a  href="{{ action("ProdutosController@getIndex") }}" class="btn btn-default">Limpar</a>		
+		</div>
+	</form>
+	<div class="clearfix"></div>
+	<hr>
+	<p><a href="{{ action("ProdutosController@getInserir") }}">Inserir Produto</a> &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;
+    <a href="voltar" onclick="window.history.go(-1)">Voltar</a></p>
+	<table class="table table-striped">
+		<tr>
+			<td>Id</td>
+			<td>Imagem</td>
+			<td>Produto</td>
+			<td>Quantidade</td>
+			<td style="width: 200px">Ações</td>
+		</tr>
+		{% for p in produtos %}
+			<tr>
+				<td> {{p.id}} </td>
+				<td> 
+					{% if p.imagem %}
+						<img style="width:80px" src="{{ asset('img/produtos/' ~ p.id ~ '.' ~ p.imagem)}}">
+					{% else %}
+						---
+					{% endif %}
+				</td>
+				<td> {{p.nome}} </td>
+				<td> {{p.quantidade}} </td>
+				<td>
+					<a class="btn btn-warning" href="{{action("ProdutosController@getEditar", [p.id])}}">Editar</a>
+					<a class="btn btn-danger" href="{{action("ProdutosController@getDelete", [p.id])}}">Deletar</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+	{{ produtos.render | raw}}
+{% endblock %}
